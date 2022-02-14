@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+  <form>
+    <input type="TextLine" name="matomoUrl">
+      <label>Matomo URL</label>
+      <help-text>URL to the Matomo service. E.g. http://localhost or //example-site.matomo.cloud</help-text>
+      <occurrences minimum="1" maximum="1"/>
+    </input>
+    <input type="TextLine" name="matomoJavaScriptUrl">
+      <label>Matomo JavaScript URL</label>
+      <help-text>Base URL to the Matomo JavaScript. E.g. http://localhost or //cdn.matomo.cloud/example-site.matomo.cloud</help-text>
+      <occurrences minimum="1" maximum="1"/>
+    </input>
+    <input type="TextLine" name="siteId">
+      <label>Site ID</label>
+      <help-text>Site ID for the site. E.g. 1 or 2</help-text>
+      <occurrences minimum="1" maximum="1"/>
+    </input>
+    <input type="TextLine" name="domainName">
+      <label>Site domain name</label>
+      <help-text>Base domain name for the site, e.g example.com</help-text>
+      <occurrences minimum="1" maximum="1"/>
+    </input>
+    <input type="Checkbox" name="trackSubdomains">
+      <label>Track visitors across all subdomains.</label>
+      <occurrences minimum="0" maximum="1"/>
+    </input>
+    <input type="Checkbox" name="insertDomainName">
+      <label>Insert domain name in front of page title.</label>
+      <help-text>If a user visits the «About us»-page on blog.example.com, it will appear as «blog / About us». This is the easiest way to get an overview of your traffic by subdomain.</help-text>
+      <occurrences minimum="0" maximum="1"/>
+    </input>
+    <input type="Checkbox" name="hideAliasClicks">
+      <label>In the "Outlinks" report, hide clicks to known alias URLs of this site.</label>
+      <help-text>So clicks on links to Alias URLs (eg. x.example.com) will not be counted as "Outlink".</help-text>
+      <occurrences minimum="0" maximum="1"/>
+    </input>
+    <input type="Checkbox" name="trackDisabledJS">
+      <label>Track users with JavaScript disabled.</label>
+      <occurrences minimum="0" maximum="1"/>
+    </input>
+    <input type="Checkbox" name="enableTracking">
+      <label>Enable tracking</label>
+      <occurrences minimum="0" maximum="1"/>
+    </input>
+    <input type="Checkbox" name="disableCookies">
+      <label>Disable tracking cookies</label>
+      <help-text>Matomo can track users without tracking cookies too, but may lose precision for some reports. Note: If the Cookie Panel app is used on this site, it will override this setting.</help-text>
+      <occurrences minimum="0" maximum="1"/>
+    </input>
+  </form>
+  <processors>
+    <response-processor name="matomo-report" order="10"/>
+  </processors>
+  <mappings>
+    <mapping controller="/site/matomo/matomo.js" order="10">
+      <pattern>.*/matomo\.js</pattern>
+    </mapping>
+</mappings>
+</site>
