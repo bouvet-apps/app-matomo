@@ -2,7 +2,7 @@
 
 This app enables Matomo analytics for a site.
 
-![Build status](https://github.com/bouvet/app-matomo/actions/workflows/enonic-gradle.yml/badge.svg)
+![Build status](https://github.com/bouvet-apps/app-matomo/actions/workflows/enonic-gradle.yml/badge.svg)
 
 Here's the documentation for this application:
 
