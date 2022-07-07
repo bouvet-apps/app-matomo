@@ -21,6 +21,16 @@ exports.get = function (req) {
   var enableTracking = siteConfig['enableTracking'] || false;
   var disableCookies = siteConfig['disableCookies'] || false;
 
+  log.info(JSON.stringify(siteConfig, null, 2));
+  var matomoTagManagerContainerId = '';
+  if (siteConfig.matomoTagManager) {
+    log.info("Is not empty");
+    matomoTagManagerContainerId = portalLib.sanitizeHtml(siteConfig['matomoTagManager'].containerId || '');
+    log.info(matomoTagManagerContainerId);
+  } else {
+    log.info("Is empty");
+  }
+
   if (
     !enableTracking ||
     !matomoUrl ||
@@ -61,6 +71,10 @@ exports.get = function (req) {
   }
   snippet += '_paq.push(["trackPageView"]);';
   snippet += '_paq.push(["enableLinkTracking"]);';
+
+  if (matomoTagManagerContainerId) {
+    snippet += '/* Matomo Tag Manager */;var _mtm = window._mtm = window._mtm || [];_mtm.push({"mtm.startTime": (new Date().getTime()), "event": "mtm.Start"});var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0];g.async=true; g.src="' + matomoUrl + '/container_' + matomoTagManagerContainerId + '.js"; s.parentNode.insertBefore(g,s)';
+  }
 
   return {
       contentType: 'application/javascript; charset=utf-8',
