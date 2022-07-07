@@ -13,6 +13,7 @@ exports.get = function (req) {
   }
 
   var matomoUrl = portalLib.sanitizeHtml(siteConfig['matomoUrl'] || '');
+  var matomoJavaScriptUrl = portalLib.sanitizeHtml(siteConfig['matomoJavaScriptUrl'] || '');
   var siteId = portalLib.sanitizeHtml(siteConfig['siteId'] || '1');
   var domainName = portalLib.sanitizeHtml(siteConfig['domainName'] || '');
   var trackSubdomains = siteConfig['trackSubdomains'] || false;
@@ -20,20 +21,15 @@ exports.get = function (req) {
   var hideAliasClicks = siteConfig['hideAliasClicks'] || false;
   var enableTracking = siteConfig['enableTracking'] || false;
   var disableCookies = siteConfig['disableCookies'] || false;
-
-  log.info(JSON.stringify(siteConfig, null, 2));
   var matomoTagManagerContainerId = '';
   if (siteConfig.matomoTagManager) {
-    log.info("Is not empty");
     matomoTagManagerContainerId = portalLib.sanitizeHtml(siteConfig['matomoTagManager'].containerId || '');
-    log.info(matomoTagManagerContainerId);
-  } else {
-    log.info("Is empty");
   }
 
   if (
     !enableTracking ||
     !matomoUrl ||
+    !matomoJavaScriptUrl ||
     !siteId ||
     typeof trackSubdomains !== "boolean" ||
     typeof insertDomainName !== "boolean" ||
@@ -73,7 +69,7 @@ exports.get = function (req) {
   snippet += '_paq.push(["enableLinkTracking"]);';
 
   if (matomoTagManagerContainerId) {
-    snippet += '/* Matomo Tag Manager */;var _mtm = window._mtm = window._mtm || [];_mtm.push({"mtm.startTime": (new Date().getTime()), "event": "mtm.Start"});var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0];g.async=true; g.src="' + matomoUrl + '/container_' + matomoTagManagerContainerId + '.js"; s.parentNode.insertBefore(g,s)';
+    snippet += '/* Matomo Tag Manager */;var _mtm = window._mtm = window._mtm || [];_mtm.push({"mtm.startTime": (new Date().getTime()), "event": "mtm.Start"});var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0];g.async=true; g.src="' + matomoJavaScriptUrl + '/container_' + matomoTagManagerContainerId + '.js"; s.parentNode.insertBefore(g,s)';
   }
 
   return {
