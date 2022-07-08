@@ -35,6 +35,15 @@ That’s it, you’re done!
 
 You should now be able to see user behavior in Matomo.
 
+# Matomo Tag Manager
+If you want to use [Matomo Tag Manager](https://matomo.org/guide/tag-manager/) you must first create a container. Follow the instructions on Matomo's website.
+
+You will find the Container ID on the Tag Manager / Manage Containers page.
+![](images/matomo_09.png)
+
+Enter the Container ID into the app config in Enonic XP, then publish the site and you're done!
+![](images/matomo_10.png)
+
 # Content Security Policy (CSP)
 
 _If your site doesn't have a CSP, you should definitively have one._
