@@ -15,8 +15,13 @@ exports.responseProcessor = function (req, res) {
   var matomoUrl = portalLib.sanitizeHtml(siteConfig['matomoUrl'] || '');
   var matomoJavaScriptUrl = portalLib.sanitizeHtml(siteConfig['matomoJavaScriptUrl'] || '');
   var siteId = portalLib.sanitizeHtml(siteConfig['siteId'] || '1');
-  var enableTracking = siteConfig['enableTracking'] || false;
-  var trackDisabledJS = siteConfig['trackDisabledJS'] || false;
+  var matomoOptions = siteConfig.options || {};
+  var enableTracking = matomoOptions['enableTracking'] || false;
+  var trackDisabledJS = matomoOptions['trackDisabledJS'] || false;
+  var matomoTagManagerContainerId = '';
+  if (siteConfig.matomoTagManager) {
+    matomoTagManagerContainerId = portalLib.sanitizeHtml(siteConfig.matomoTagManager.containerId || '');
+  }
 
   if (
     !enableTracking ||
@@ -25,6 +30,7 @@ exports.responseProcessor = function (req, res) {
     !siteId ||
     typeof trackDisabledJS !== "boolean"
   ) {
+    log.info("Matomo app is not properly configured or tracking is disabled");
     return res; // App is not properly configured or tracking is disabled
   }
 
@@ -43,7 +49,12 @@ exports.responseProcessor = function (req, res) {
 
 
   res.pageContributions.headEnd.push("<script src=\"matomo.js\"></script>");
-  res.pageContributions.headEnd.push("<script async defer src=\"" + matomoJavaScriptUrl + "/matomo.js\"></script>");
+  if (matomoTagManagerContainerId) {
+    res.pageContributions.headEnd.push("<script async defer src=\"" + matomoJavaScriptUrl + "/container_" + matomoTagManagerContainerId + ".js\"></script>");
+  }
+  if (!matomoTagManagerContainerId) {
+    res.pageContributions.headEnd.push("<script async defer src=\"" + matomoJavaScriptUrl + "/matomo.js\"></script>");
+  }
 
   if (trackDisabledJS) {
     res.pageContributions.bodyEnd.push('<noscript><p><img src="' + matomoUrl + '/matomo.php?idsite=' + siteId + '&amp;rec=1" style="border:0;" alt="" /></p></noscript>');

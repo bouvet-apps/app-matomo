@@ -1,23 +1,29 @@
 plugins {
-    id 'com.enonic.xp.app' version '3.1.0'
+  id 'maven-publish'
+  id 'com.enonic.xp.app' version '3.2.0'
 }
 
 app {
-    name = project.ext.appName
-    displayName = project.ext.displayName
-    vendorName = project.ext.vendor
-    vendorUrl = project.ext.vendorUrl
-    systemVersion = "${xpVersion}"
+  name = project.ext.appName
+  displayName = project.ext.displayName
+  vendorName = project.ext.vendor
+  vendorUrl = project.ext.vendorUrl
+  systemVersion = "${xpVersion}"
 }
 
 dependencies {
-    implementation "com.enonic.xp:core-api:${xpVersion}"
-    implementation "com.enonic.xp:portal-api:${xpVersion}"
-    include "com.enonic.xp:lib-content:${xpVersion}"
-    include "com.enonic.xp:lib-portal:${xpVersion}"
+  implementation "com.enonic.xp:core-api:${xpVersion}"
+  implementation "com.enonic.xp:portal-api:${xpVersion}"
+  include "com.enonic.xp:lib-content:${xpVersion}"
+  include "com.enonic.xp:lib-portal:${xpVersion}"
 }
 
 repositories {
-    mavenLocal()
-    xp.enonicRepo()
+  mavenLocal()
+  xp.enonicRepo()
+}
+
+wrapper {
+    gradleVersion = '7.3.1'
+    distributionType = Wrapper.DistributionType.BIN
 }

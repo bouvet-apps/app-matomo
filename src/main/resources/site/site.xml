@@ -21,37 +21,43 @@
       <help-text>Base domain name for the site, e.g example.com</help-text>
       <occurrences minimum="1" maximum="1"/>
     </input>
-    <input type="Checkbox" name="trackSubdomains">
-      <label>Track visitors across all subdomains.</label>
-      <occurrences minimum="0" maximum="1"/>
-    </input>
-    <input type="Checkbox" name="insertDomainName">
-      <label>Insert domain name in front of page title.</label>
-      <help-text>If a user visits the «About us»-page on blog.example.com, it will appear as «blog / About us». This is the easiest way to get an overview of your traffic by subdomain.</help-text>
-      <occurrences minimum="0" maximum="1"/>
-    </input>
-    <input type="Checkbox" name="hideAliasClicks">
-      <label>In the "Outlinks" report, hide clicks to known alias URLs of this site.</label>
-      <help-text>So clicks on links to Alias URLs (eg. x.example.com) will not be counted as "Outlink".</help-text>
-      <occurrences minimum="0" maximum="1"/>
-    </input>
-    <input type="Checkbox" name="trackDisabledJS">
-      <label>Track users with JavaScript disabled.</label>
-      <occurrences minimum="0" maximum="1"/>
-    </input>
-    <input type="Checkbox" name="enableTracking">
-      <label>Enable tracking</label>
-      <occurrences minimum="0" maximum="1"/>
-    </input>
-    <input type="Checkbox" name="disableCookies">
-      <label>Disable tracking cookies</label>
-      <help-text>Matomo can track users without tracking cookies too, but may lose precision for some reports. Note: If the Cookie Panel app is used on this site, it will override this setting.</help-text>
-      <occurrences minimum="0" maximum="1"/>
-    </input>
+    <item-set name="options">
+      <label>Matomo Options</label>
+      <occurrences minimum="1" maximum="1"/>
+      <items>
+        <input type="Checkbox" name="trackSubdomains">
+          <label>Track visitors across all subdomains.</label>
+          <occurrences minimum="0" maximum="1"/>
+        </input>
+        <input type="Checkbox" name="insertDomainName">
+          <label>Insert domain name in front of page title.</label>
+          <help-text>If a user visits the «About us»-page on blog.example.com, it will appear as «blog / About us». This is the easiest way to get an overview of your traffic by subdomain.</help-text>
+          <occurrences minimum="0" maximum="1"/>
+        </input>
+        <input type="Checkbox" name="hideAliasClicks">
+          <label>In the "Outlinks" report, hide clicks to known alias URLs of this site.</label>
+          <help-text>So clicks on links to Alias URLs (eg. x.example.com) will not be counted as "Outlink".</help-text>
+          <occurrences minimum="0" maximum="1"/>
+        </input>
+        <input type="Checkbox" name="trackDisabledJS">
+          <label>Track users with JavaScript disabled.</label>
+          <occurrences minimum="0" maximum="1"/>
+        </input>
+        <input type="Checkbox" name="enableTracking">
+          <label>Enable tracking</label>
+          <occurrences minimum="0" maximum="1"/>
+        </input>
+        <input type="Checkbox" name="disableCookies">
+          <label>Disable tracking cookies</label>
+          <help-text>Matomo can track users without tracking cookies too, but may lose precision for some reports. Note: If the Cookie Panel app is used on this site, it will override this setting.</help-text>
+          <occurrences minimum="0" maximum="1"/>
+        </input>
+      </items>
+    </item-set>
     <item-set name="matomoTagManager">
-      <label>Tag Manager</label>
+      <label>Matomo Tag Manager</label>
       <occurrences minimum="0" maximum="1"/>
-      <help-text>Enable Matomo Tag Manager.</help-text>
+      <help-text>Enable Matomo Tag Manager. Note: This will disable the default pageView event, so you must set this up in Matomo Tag Manager to track page views.</help-text>
       <items>
         <input name="containerId" type="TextLine">
           <label>Tag Manager Container ID</label>
