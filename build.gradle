@@ -1,5 +1,19 @@
 plugins {
-    id 'com.enonic.xp.app' version '3.1.0'
+    id 'java'
+    id 'maven-publish'
+    id 'com.enonic.xp.app' version '3.2.0'
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = "${group}"
+            artifactId = "${projectName}"
+            version = "${version}"
+
+            from components.java
+        }
+    }
 }
 
 app {
@@ -20,4 +34,9 @@ dependencies {
 repositories {
     mavenLocal()
     xp.enonicRepo()
+}
+
+wrapper {
+    gradleVersion = '7.3.1'
+    distributionType = Wrapper.DistributionType.BIN
 }
