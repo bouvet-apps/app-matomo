@@ -30,7 +30,7 @@ exports.responseProcessor = function (req, res) {
     !siteId ||
     typeof trackDisabledJS !== "boolean"
   ) {
-    log.info("Matomo app is not properly configured or tracking is disabled");
+    log.error("Matomo app is not properly configured or tracking is disabled");
     return res; // App is not properly configured or tracking is disabled
   }
 
@@ -47,8 +47,7 @@ exports.responseProcessor = function (req, res) {
     res.pageContributions.bodyEnd = [bodyEnd];
   }
 
-
-  res.pageContributions.headEnd.push("<script src=\"matomo.js\"></script>");
+  res.pageContributions.headEnd.push("<script async defer src=\"matomo.js\"></script>");
   if (matomoTagManagerContainerId) {
     res.pageContributions.headEnd.push("<script async defer src=\"" + matomoJavaScriptUrl + "/container_" + matomoTagManagerContainerId + ".js\"></script>");
   }

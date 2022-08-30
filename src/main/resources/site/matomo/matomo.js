@@ -11,12 +11,11 @@ exports.get = function (req) {
     log.error("Failed to get site config in Matomo Analytics");
     return; // Something is wrong, so we stop.
   }
-  log.info(JSON.stringify(siteConfig, null, 2));
   var matomoUrl = portalLib.sanitizeHtml(siteConfig['matomoUrl'] || '');
   var matomoJavaScriptUrl = portalLib.sanitizeHtml(siteConfig['matomoJavaScriptUrl'] || '');
   var siteId = portalLib.sanitizeHtml(siteConfig['siteId'] || '1');
   var domainName = portalLib.sanitizeHtml(siteConfig['domainName'] || '');
-  var matomoOptions = siteConfig.options || {};
+  var matomoOptions = siteConfig.options || {};
   var trackSubdomains = matomoOptions['trackSubdomains'] || false;
   var insertDomainName = matomoOptions['insertDomainName'] || false; 
   var hideAliasClicks = matomoOptions['hideAliasClicks'] || false;
@@ -79,18 +78,22 @@ exports.get = function (req) {
   if (matomoTagManagerContainerId) {
     snippet += '/* Matomo Tag Manager */;var _mtm = window._mtm = window._mtm || [];_mtm.push({"mtm.startTime": (new Date().getTime()), "event": "mtm.Start"});';
     if (req.cookies["no-bouvet-app-matomo_disabled"]) { // If this cookie is present, the Cookie Panel app is installed.
-      snippet += 'window._paq=window._paq||[];_paq.push(["requireCookieConsent"]);'; // We don't set cookies without user consent.
       if (req.cookies["no-bouvet-app-matomo_disabled"] === "true") { // User has not given consent.
-        snippet += 'window._paq=window._paq||[];_paq.push(["forgetCookieConsentGiven"]);'; // User may have revoked consent. We shall remember this.
-  
+        snippet += 'window._paq=window._paq||[];_paq.push(["forgetCookieConsentGiven"]);_paq.push(["requireCookieConsent"]);'; // User may have revoked consent. We shall remember this.
+
         /* This will allow the Cookie Panel app to tell us when the User has consented to storing tracking cookies */
         snippet += 'window.__RUN_ON_COOKIE_CONSENT__ = window.__RUN_ON_COOKIE_CONSENT__ || {};';
         snippet += 'window.__RUN_ON_COOKIE_CONSENT__["no-bouvet-app-matomo_disabled"] = function () {window._paq.push(["rememberCookieConsentGiven"]);};';
+      } else if (req.cookies["no-bouvet-app-matomo_disabled"] === "false") { // User have given consent and we can track responsibly.
+        snippet += 'window._paq=window._paq||[];_paq.push(["setConsentGiven"]);';
       }
     }
   }
 
   return {
+      headers: {
+        "Cache-Control": "no-cache, must-revalidate" // As the script can be wildly different for each user, we can't cache it.
+      },
       contentType: 'application/javascript; charset=utf-8',
       body: snippet
   };
