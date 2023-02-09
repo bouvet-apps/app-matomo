@@ -1,6 +1,16 @@
 var contentLib = require('/lib/xp/content');
 var portalLib = require('/lib/xp/portal');
 
+function hashCode(str) {
+  var hash = 0;
+  for (var i = 0, len = str.length; i < len; i++) {
+      var chr = str.charCodeAt(i);
+      hash = (hash << 5) - hash + chr;
+      hash |= 0; // Convert to 32bit integer
+  }
+  return hash;
+}
+
 exports.responseProcessor = function (req, res) {
   if (req.mode !== 'live') {
     return res; // We don't need to tell Analytics about things done in Content Studio
@@ -15,7 +25,7 @@ exports.responseProcessor = function (req, res) {
   var matomoUrl = portalLib.sanitizeHtml(siteConfig['matomoUrl'] || '');
   var matomoJavaScriptUrl = portalLib.sanitizeHtml(siteConfig['matomoJavaScriptUrl'] || '');
   var siteId = portalLib.sanitizeHtml(siteConfig['siteId'] || '1');
-  var matomoOptions = siteConfig.options || {};
+  var matomoOptions = siteConfig.options || {};
   var enableTracking = matomoOptions['enableTracking'] || false;
   var trackDisabledJS = matomoOptions['trackDisabledJS'] || false;
   var matomoTagManagerContainerId = '';
@@ -47,7 +57,12 @@ exports.responseProcessor = function (req, res) {
     res.pageContributions.bodyEnd = [bodyEnd];
   }
 
-  res.pageContributions.headEnd.push("<script async defer src=\"matomo.js\"></script>");
+  var hash = "";
+  if (req.cookies["no-bouvet-app-matomo_disabled"]) { // If this cookie is present, the Cookie Panel app is installed.
+    hash = hashCode(req.cookies["no-bouvet-app-matomo_disabled"] + ""); // Create a unique hash if user has consented to tracking.
+  }
+
+  res.pageContributions.headEnd.push("<script async defer src=\"matomo.js?" + hash + "\"></script>");
   if (matomoTagManagerContainerId) {
     res.pageContributions.headEnd.push("<script async defer src=\"" + matomoJavaScriptUrl + "/container_" + matomoTagManagerContainerId + ".js\"></script>");
   }
