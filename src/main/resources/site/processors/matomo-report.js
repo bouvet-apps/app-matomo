@@ -62,7 +62,13 @@ exports.responseProcessor = function (req, res) {
     hash = hashCode(req.cookies["no-bouvet-app-matomo_disabled"] + ""); // Create a unique hash if user has consented to tracking.
   }
 
-  res.pageContributions.headEnd.push("<script async defer src=\"matomo.js?" + hash + "\"></script>");
+  let siteRootPath = portalLib.pageUrl({ id: portalLib.getSite()._id });
+  // Site vhost is mounted on domain root, e.g. www.example.com
+  if (siteRootPath === "/") {
+    siteRootPath = "";
+  }
+
+  res.pageContributions.headEnd.push("<script async defer src=\"" + siteRootPath + "/matomo.js?" + hash + "\"></script>");
   if (matomoTagManagerContainerId) {
     res.pageContributions.headEnd.push("<script async defer src=\"" + matomoJavaScriptUrl + "/container_" + matomoTagManagerContainerId + ".js\"></script>");
   }
