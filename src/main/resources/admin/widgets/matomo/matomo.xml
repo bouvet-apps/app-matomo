@@ -1,0 +1,6 @@
+<widget xmlns="urn:enonic:xp:model:1.0">
+  <display-name>Matomo</display-name>
+  <interfaces>
+    <interface>contentstudio.contextpanel</interface>
+  </interfaces>
+</widget>

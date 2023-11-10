@@ -29,11 +29,15 @@ dependencies {
   implementation "com.enonic.xp:portal-api:${xpVersion}"
   include "com.enonic.xp:lib-content:${xpVersion}"
   include "com.enonic.xp:lib-portal:${xpVersion}"
+  include "com.enonic.lib:lib-thymeleaf:2.1.0"
+  include 'com.enonic.lib:lib-http-client:3.2.2'
 }
 
 repositories {
   mavenLocal()
+  mavenCentral()
   xp.enonicRepo()
+  maven { url 'https://repo.enonic.com/public' }
 }
 
 wrapper {
