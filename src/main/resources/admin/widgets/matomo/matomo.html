@@ -1,6 +1,50 @@
 <widget id="widget-matomo">
     <link rel="stylesheet" data-th-href="${styleUri}" type="text/css" media="all"/>
-    <div>Heisann</div>
-    <p>Unike brukere: <span data-th-text="${uniqueVisitors}"></span></p>
-    <img data-th-src="${countryGraphSrc}" alt="">
+    <div th:if="${pageData != null}">
+<!--    <h1>Report for <span data-th-text="${pageData.yesterday.label}?: ' '"/></h1>-->
+    <ul>
+        <li th:if="${pageData.yesterday != null}">
+            <input type="checkbox">
+            <i></i>
+            <h2 class="yesterday-header">Yesterday</h2>
+            <p>Unique visitors: <span data-th-text="${pageData.yesterday.nb_uniq_visitors}?: 'No data'"/></p>
+            <p>Hits: <span data-th-text="${pageData.yesterday.nb_hits}?: 'No data'"/></p>
+            <p>Hits from search: <span data-th-text="${pageData.yesterday.nb_hits_following_search}?: 'No data'"/></p>
+            <p>Total time spent on page: <span data-th-text="${pageData.yesterday.sum_time_spent} + 's'?: 'No data'"/></p>
+            <p>Avg time spent on page: <span data-th-text="${pageData.yesterday.avg_time_on_page} + 's'?: 'No data'"/></p>
+            <p>Exit rate: <span data-th-text="${pageData.yesterday.exit_rate}?: 'No data'"/></p>
+            <p>Bounce rate: <span data-th-text="${pageData.yesterday.bounce_rate}?: 'No data'"/></p>
+            <p>Bounce count: <span data-th-text="${pageData.yesterday.bounce_count}?: 'No data'"/></p>
+            <p>Entry bounce count: <span data-th-text="${pageData.yesterday.entry_bounce_count}?: 'No data'"/></p>
+        </li>
+        <li th:if="${pageData.lastWeek != null}">
+            <input type="checkbox" checked>
+            <i></i>
+            <h2 class="last-week-header">Last week</h2>
+            <p>Unique visitors: <span data-th-text="${pageData.lastWeek.nb_uniq_visitors}?: 'No data'"/></p>
+            <p>Hits: <span data-th-text="${pageData.lastWeek.nb_hits}?: 'No data'"/></p>
+            <p>Hits from search: <span data-th-text="${pageData.lastWeek.nb_hits_following_search}?: 'No data'"/></p>
+            <p>Total time spent on page: <span data-th-text="${pageData.lastWeek.sum_time_spent} + 's'?: 'No data'"/></p>
+            <p>Avg time spent on page: <span data-th-text="${pageData.lastWeek.avg_time_on_page} + 's'?: 'No data'"/></p>
+            <p>Exit rate: <span data-th-text="${pageData.lastWeek.exit_rate}?: 'No data'"/></p>
+            <p>Bounce rate: <span data-th-text="${pageData.lastWeek.bounce_rate}?: 'No data'"/></p>
+            <p>Bounce count: <span data-th-text="${pageData.lastWeek.bounce_count}?: 'No data'"/></p>
+            <p>Entry bounce count: <span data-th-text="${pageData.lastWeek.entry_bounce_count}?: 'No data'"/></p>
+        </li>
+        <li th:if="${pageData.lastMonth != null}">
+            <input type="checkbox" checked>
+            <i></i>
+            <h2 class="last-month-header">Last month</h2>
+            <p>Unique visitors: <span data-th-text="${pageData.lastMonth.nb_uniq_visitors}?: 'No data'"/></p>
+            <p>Hits: <span data-th-text="${pageData.lastMonth.nb_hits}?: 'No data'"/></p>
+            <p>Hits from search: <span data-th-text="${pageData.lastMonth.nb_hits_following_search}?: 'No data'"/></p>
+            <p>Total time spent on page: <span data-th-text="${pageData.lastMonth.sum_time_spent} + 's'?: 'No data'"/></p>
+            <p>Avg time spent on page: <span data-th-text="${pageData.lastMonth.avg_time_on_page} + 's'?: 'No data'"/></p>
+            <p>Exit rate: <span data-th-text="${pageData.lastMonth.exit_rate}?: 'No data'"/></p>
+            <p>Bounce rate: <span data-th-text="${pageData.lastMonth.bounce_rate}?: 'No data'"/></p>
+            <p>Bounce count: <span data-th-text="${pageData.lastMonth.bounce_count}?: 'No data'"/></p>
+            <p>Entry bounce count: <span data-th-text="${pageData.lastMonth.entry_bounce_count}?: 'No data'"/></p>
+        </li>
+    </ul>
+    </div>
 </widget>
