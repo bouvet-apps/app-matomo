@@ -12,6 +12,18 @@ const settings = {
 const token = app.config['matomo.token'];
 
 exports.get = function (req) {
+
+  if (!req.params.contentId) {
+    const errorView = resolve("./error-handler/error.html");
+    const errorModel = {styleUri: libs.portal.assetUrl({
+        path: "matomo.css"
+      }),}
+    return {
+      body: libs.thymeleaf.render(errorView, errorModel),
+      contentType: 'text/html'
+    };
+  }
+
   const view = resolve("./matomo.html");
   const config = libs.content.getSite({key: req.params.contentId}).data.siteConfig;
   const matomoConfig = config.filter(function(obj) {
@@ -27,22 +39,6 @@ exports.get = function (req) {
       lastWeek: getPageUrl('lastWeek', 'day'),
       lastMonth: getPageUrl('lastMonth', 'day')
     },
-    // uniqueVisitors: {
-    //   yesterday: getUniqueVisitors('yesterday', 'day'),
-    //   lastWeek: getUniqueVisitors('lastWeek', 'day'),
-    //   lastMonth: getUniqueVisitors('lastMonth', 'day')
-    // },
-    // countryGraphSrc: {
-    //   yesterday: getCountryGraph('yesterday', 'day'),
-    //   lastWeek: getCountryGraph('lastWeek', 'day'),
-    //   lastMonth: getCountryGraph('lastMonth', 'day')
-    // },
-    // totalTimeSpent: {
-    //   yesterday: getTotalTimeSpent('yesterday', 'day'),
-    //   lastWeek: getTotalTimeSpent('lastWeek', 'day'),
-    //   lastMonth: getTotalTimeSpent('lastMonth', 'day')
-    // }
-
   };
 
   function getPageUrl(date, period) {
@@ -73,19 +69,6 @@ exports.get = function (req) {
 
   function getCountryGraph(date, period){
     return `https:${matomoConfig.config.matomoUrl}/?module=API&method=ImageGraph.get&idSite=${matomoConfig.config.siteId}&apiModule=UserCountry&apiAction=getCountry&graphType=horizontalBar&period=${period}&date=${date}&width=500&height=250&format=${settings.responseFormat}&token_auth=${token}`;
-  }
-
-  function getCountryGraphPage(date, period, pageUrl){
-    return `https:${matomoConfig.config.matomoUrl}/?module=API&method=ImageGraph.get&idSite=${matomoConfig.config.siteId}&apiModule=UserCountry&apiAction=getCountry&graphType=horizontalBar&period=${period}&date=${date}&segment=pageUrl==${encodeURIComponent(pageUrl)}&width=500&height=250&format=${settings.responseFormat}&token_auth=${token}`;
-  }
-
-  log.info("token: %s", JSON.stringify(getCountryGraphPage('lastMonth', 'day', 'https://www.bouvet.no'), null, 4));
-
-  function getTotalTimeSpent(date, period){
-    const response = libs.httpClient.request({
-      url: `https:${matomoConfig.config.matomoUrl}/?module=API&method=VisitsSummary.getSumVisitsLength&date=${date}&period=${period}&idSite=${matomoConfig.config.siteId}&format=${settings.responseFormat}&token_auth=${token}`
-    })
-    return JSON.parse(response.body).value;
   }
 
   return {

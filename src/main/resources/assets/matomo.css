@@ -19,6 +19,12 @@
     user-select: none;
 }
 
+#widget-matomo .error-wrapper {
+    display: flex;
+    justify-content: center;
+    padding-top: 1rem;
+}
+
 #widget-matomo @media (max-width: 550px) {
     body {
         box-sizing: border-box;
@@ -53,7 +59,7 @@
 }
 
 #widget-matomo p {
-    color: rgba(48, 69, 92, 0.8);
+    color: rgb(41, 59, 77);
     font-size: 17px;
     line-height: 26px;
     letter-spacing: 1px;
