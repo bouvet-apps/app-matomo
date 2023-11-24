@@ -44,6 +44,21 @@ You will find the Container ID on the Tag Manager / Manage Containers page.
 Enter the Container ID into the app config in Enonic XP, then publish the site and you're done!
 ![](images/matomo_10.png)
 
+# Installing and using the widget
+
+1. Create a config file called `no.bouvet.app.matomo.cfg` in the config folder of your XP installation
+
+2. Add your matomo-token to this file. No quotes
+```
+matomo.token = token
+```
+
+3. Build and deploy the app
+
+4. Open the context panel for the site on the right-hand side of the Content Studio, and select content.
+
+![](images/matomo_11.png)
+
 # Content Security Policy (CSP)
 
 _If your site doesn't have a CSP, you should definitively have one._
