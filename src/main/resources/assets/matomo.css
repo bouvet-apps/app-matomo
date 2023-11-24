@@ -19,12 +19,6 @@
     user-select: none;
 }
 
-#widget-matomo .error-wrapper {
-    display: flex;
-    justify-content: center;
-    padding-top: 1rem;
-}
-
 #widget-matomo @media (max-width: 550px) {
     body {
         box-sizing: border-box;
