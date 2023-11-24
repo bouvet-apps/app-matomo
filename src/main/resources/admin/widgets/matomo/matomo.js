@@ -12,12 +12,13 @@ const settings = {
 const token = app.config['matomo.token'];
 
 exports.get = function (req) {
-
   if (!req.params.contentId) {
     const errorView = resolve("./error-handler/error.html");
-    const errorModel = {styleUri: libs.portal.assetUrl({
+    const errorModel = {
+      styleUri: libs.portal.assetUrl({
         path: "matomo.css"
-      }),}
+      }),
+    };
     return {
       body: libs.thymeleaf.render(errorView, errorModel),
       contentType: 'text/html'
@@ -76,4 +77,3 @@ exports.get = function (req) {
     contentType: 'text/html'
   };
 };
-

@@ -1,7 +1,6 @@
 <widget id="widget-matomo">
     <link rel="stylesheet" data-th-href="${styleUri}" type="text/css" media="all"/>
     <div th:if="${pageData != null}">
-<!--    <h1>Report for <span data-th-text="${pageData.yesterday.label}?: ' '"/></h1>-->
     <ul>
         <li th:if="${pageData.yesterday != null}">
             <input type="checkbox">
