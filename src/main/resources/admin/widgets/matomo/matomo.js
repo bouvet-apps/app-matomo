@@ -11,17 +11,6 @@ const settings = {
 
 const token = app.config['matomo.token'];
 
-function getUniqueVisitors(date, period, matomoConfig){
-  const response = libs.httpClient.request({
-    url: `https:${matomoConfig.config.matomoUrl}/?module=API&method=VisitsSummary.getUniqueVisitors&date=${date}&period=${period}&idSite=${matomoConfig.config.siteId}&format=${settings.responseFormat}&token_auth=${token}`
-  })
-  return JSON.parse(response.body).value;
-}
-
-function getCountryGraph(date, period, matomoConfig){
-  return `https:${matomoConfig.config.matomoUrl}/?module=API&method=ImageGraph.get&idSite=${matomoConfig.config.siteId}&apiModule=UserCountry&apiAction=getCountry&graphType=horizontalBar&period=${period}&date=${date}&width=500&height=250&format=${settings.responseFormat}&token_auth=${token}`;
-}
-
 function getPageUrl(date, period, req, matomoConfig) {
   if (req.params.contentId && matomoConfig.config.domainName) {
     const contentPath = libs.content.get({ key: req.params.contentId })._path;
