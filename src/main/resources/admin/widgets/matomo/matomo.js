@@ -55,6 +55,13 @@ exports.get = function (req) {
     },
   };
 
+  if (!model.pageData.yesterday && !model.pageData.lastWeek && !model.pageData.lastMonth) {
+    return {
+      contentType: "text/html",
+      body: "<widget class='error'>No data found</widget>"
+    };
+  }
+
   return {
     body: libs.thymeleaf.render(view, model),
     contentType: 'text/html'
