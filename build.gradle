@@ -1,7 +1,7 @@
 plugins {
   id 'java'
   id 'maven-publish'
-  id 'com.enonic.xp.app' version '3.2.0'
+  id 'com.enonic.xp.app' version '3.4.0'
 }
 
 publishing {
@@ -29,14 +29,18 @@ dependencies {
   implementation "com.enonic.xp:portal-api:${xpVersion}"
   include "com.enonic.xp:lib-content:${xpVersion}"
   include "com.enonic.xp:lib-portal:${xpVersion}"
+  include "com.enonic.lib:lib-thymeleaf:2.1.0"
+  include 'com.enonic.lib:lib-http-client:3.2.2'
 }
 
 repositories {
   mavenLocal()
+  mavenCentral()
   xp.enonicRepo()
+  maven { url 'https://repo.enonic.com/public' }
 }
 
 wrapper {
-    gradleVersion = '7.3.1'
+    gradleVersion = '8.3'
     distributionType = Wrapper.DistributionType.BIN
 }
