@@ -21,6 +21,7 @@ exports.get = function (req) {
   var hideAliasClicks = matomoOptions['hideAliasClicks'] || false;
   var enableTracking = matomoOptions['enableTracking'] || false;
   var disableCookies = matomoOptions['disableCookies'] || false;
+  var normalizePath = matomoOptions['normalizePath'] || false;
   var matomoTagManagerContainerId = '';
   if (siteConfig.matomoTagManager) {
     matomoTagManagerContainerId = portalLib.sanitizeHtml(siteConfig['matomoTagManager'].containerId || '');
@@ -46,6 +47,19 @@ exports.get = function (req) {
   if (!matomoTagManagerContainerId) {
     snippet += '/* Matomo */';
     snippet += 'var _paq = window._paq = window._paq || [];';
+
+    if(normalizePath){
+      snippet += `function modifyPath() {`;
+      snippet += `var path = window.location.pathname;`;
+      snippet += `path = path.toLowerCase();`;
+      snippet += `if (path !== '/' && path.endsWith('/')) {`;
+      snippet += `path = path.slice(0, -1);`;
+      snippet += `}`;
+      snippet += `_paq.push(['setCustomUrl', path + window.location.search + window.location.hash]);`;
+      snippet += `}`;
+      snippet += `modifyPath();`;
+    }
+
     snippet += '_paq.push(["setTrackerUrl", "' + matomoUrl + '/matomo.php"]);';
     snippet += '_paq.push(["setSiteId", "' + siteId + '"]);';
   
