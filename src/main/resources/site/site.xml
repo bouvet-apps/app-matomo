@@ -53,8 +53,8 @@
           <occurrences minimum="0" maximum="1"/>
         </input>
         <input type="Checkbox" name="normalizePath">
-          <label>Make Path lower-case and remove trailing slashes</label>
-          <help-text>Matomo does not normalize Path when listing pages, enabling this option will do this in the browser. For instance "/Example-Path/?Value=1#Info" will become "/example-path?Value=1#Info"</help-text>
+          <label>Make path lower-case and remove trailing slashes</label>
+          <help-text>Matomo does not normalize path when listing pages, enabling this option will do this in the browser. For instance "/Example-Path/?Value=1#Info" will become "/example-path?Value=1#Info"</help-text>
           <occurrences minimum="0" maximum="1"/>
         </input>
       </items>
