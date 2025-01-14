@@ -11,6 +11,11 @@
       <help-text>Base URL to the Matomo JavaScript. E.g. http://localhost or //cdn.matomo.cloud/example-site.matomo.cloud</help-text>
       <occurrences minimum="1" maximum="1"/>
     </input>
+    <input type="Date" name="cacheOverride">
+      <label>Cache override</label>
+      <help-text>Leave empty to not affect cache. Add new date to override cache, and remove it after a week. Not critical to remove it, but will keep it cleaner. </help-text>
+      <occurrences minimum="0" maximum="1"/>
+    </input>
     <input type="TextLine" name="siteId">
       <label>Site ID</label>
       <help-text>Site ID for the site. E.g. 1 or 2</help-text>
