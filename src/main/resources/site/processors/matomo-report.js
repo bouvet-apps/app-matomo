@@ -25,8 +25,9 @@ exports.responseProcessor = function (req, res) {
   var matomoUrl = portalLib.sanitizeHtml(siteConfig['matomoUrl'] || '');
   var matomoJavaScriptUrl = portalLib.sanitizeHtml(siteConfig['matomoJavaScriptUrl'] || '');
   var siteId = portalLib.sanitizeHtml(siteConfig['siteId'] || '1');
-  var cacheOverride = siteConfig['cacheOverride'] || '';
-  var overrideAddon = cacheOverride ? '?' + cacheOverride : '';
+  // Sometimes it is necessary to override the default 8 day cache
+  var cacheOverrideMatomoTagManager = siteConfig['cacheOverrideMatomoTagManager'] || '';
+  var overrideAddon = cacheOverrideMatomoTagManager ? '?date=' + cacheOverrideMatomoTagManager : '';
   var matomoOptions = siteConfig.options || {};
   var enableTracking = matomoOptions['enableTracking'] || false;
   var trackDisabledJS = matomoOptions['trackDisabledJS'] || false;
