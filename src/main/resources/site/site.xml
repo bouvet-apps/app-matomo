@@ -52,6 +52,11 @@
           <help-text>Matomo can track users without tracking cookies too, but may lose precision for some reports. Note: If the Cookie Panel app is used on this site, it will override this setting.</help-text>
           <occurrences minimum="0" maximum="1"/>
         </input>
+        <input type="Checkbox" name="normalizePath">
+          <label>Make path lower-case and remove trailing slashes</label>
+          <help-text>Matomo does not normalize path when listing pages, enabling this option will do this in the browser. For instance "/Example-Path/?Value=1#Info" will become "/example-path?Value=1#Info"</help-text>
+          <occurrences minimum="0" maximum="1"/>
+        </input>
       </items>
     </item-set>
     <item-set name="matomoTagManager">
