@@ -29,7 +29,9 @@ install Matomo on-premise.
 also check the box.
 ![](images/matomo_07.png)
 
-9. Finally, publish the site.
+9. In version 1.5 an override field has been added. This is due to matomo cloud hosting has a default cache for 8 days, and sometimes it is necessary to force an override. The date will be added to the url, enticing the browser to detect that the file is new. 
+
+10. Finally, publish the site.
 
 That’s it, you’re done!
 

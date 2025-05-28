@@ -25,6 +25,9 @@ exports.responseProcessor = function (req, res) {
   var matomoUrl = portalLib.sanitizeHtml(siteConfig['matomoUrl'] || '');
   var matomoJavaScriptUrl = portalLib.sanitizeHtml(siteConfig['matomoJavaScriptUrl'] || '');
   var siteId = portalLib.sanitizeHtml(siteConfig['siteId'] || '1');
+  // Sometimes it is necessary to override the default 8 day cache
+  var cacheOverrideMatomoTagManager = siteConfig['cacheOverrideMatomoTagManager'] || '';
+  var overrideAddon = cacheOverrideMatomoTagManager ? '?date=' + cacheOverrideMatomoTagManager : '';
   var matomoOptions = siteConfig.options || {};
   var enableTracking = matomoOptions['enableTracking'] || false;
   var trackDisabledJS = matomoOptions['trackDisabledJS'] || false;
@@ -70,7 +73,7 @@ exports.responseProcessor = function (req, res) {
 
   res.pageContributions.headEnd.push("<script defer src=\"" + siteRootPath + "/matomo.js?" + hash + "\"></script>");
   if (matomoTagManagerContainerId) {
-    res.pageContributions.headEnd.push("<script defer src=\"" + matomoJavaScriptUrl + "/container_" + matomoTagManagerContainerId + ".js\"></script>");
+    res.pageContributions.headEnd.push("<script defer src=\"" + matomoJavaScriptUrl + "/container_" + matomoTagManagerContainerId + ".js" + overrideAddon + "\"></script>");
   }
   if (!matomoTagManagerContainerId) {
     res.pageContributions.headEnd.push("<script defer src=\"" + matomoJavaScriptUrl + "/matomo.js\"></script>");
