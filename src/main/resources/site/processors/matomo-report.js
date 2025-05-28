@@ -71,12 +71,12 @@ exports.responseProcessor = function (req, res) {
     siteRootPath = "";
   }
 
-  res.pageContributions.headEnd.push("<script async defer src=\"" + siteRootPath + "/matomo.js?" + hash + "\"></script>");
+  res.pageContributions.headEnd.push("<script defer src=\"" + siteRootPath + "/matomo.js?" + hash + "\"></script>");
   if (matomoTagManagerContainerId) {
     res.pageContributions.headEnd.push("<script async defer src=\"" + matomoJavaScriptUrl + "/container_" + matomoTagManagerContainerId + ".js" + overrideAddon + "\"></script>");
   }
   if (!matomoTagManagerContainerId) {
-    res.pageContributions.headEnd.push("<script async defer src=\"" + matomoJavaScriptUrl + "/matomo.js\"></script>");
+    res.pageContributions.headEnd.push("<script defer src=\"" + matomoJavaScriptUrl + "/matomo.js\"></script>");
   }
 
   if (trackDisabledJS) {
