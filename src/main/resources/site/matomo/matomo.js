@@ -18,6 +18,7 @@ exports.get = function (req) {
   var trackSubdomains = matomoOptions['trackSubdomains'] || false;
   var insertDomainName = matomoOptions['insertDomainName'] || false;
   var hideAliasClicks = matomoOptions['hideAliasClicks'] || false;
+  var normalizePath = matomoOptions['normalizePath'] || false;
   var enableTracking = matomoOptions['enableTracking'] || false;
   var trackingConsent = matomoOptions['trackingConsent'] || "cookieConsentRequired";
   var matomoTagManagerContainerId = '';
@@ -56,6 +57,11 @@ exports.get = function (req) {
     if (insertDomainName) {
         snippet += '_paq.push(["setCookieDomain", "*.' + domainName + '"]);';
     }
+    if (normalizePath) {
+      snippet += `var path = window.location.pathname.toLowerCase();`;
+      snippet += `if (path !== '/' && path.endsWith('/')) path = path.slice(0, -1);`;
+      snippet += `_paq.push(['setCustomUrl', window.location.origin + path + window.location.search + window.location.hash]);`;
+    }
     snippet += '_paq.push(["trackPageView"]);';
     snippet += '_paq.push(["enableLinkTracking"]);';
   }
@@ -64,6 +70,12 @@ exports.get = function (req) {
   if (matomoTagManagerContainerId) {
     snippet += '/* Matomo Tag Manager */;var _mtm = window._mtm = window._mtm || [];_mtm.push({"mtm.startTime": (new Date().getTime()), "event": "mtm.Start"});';
     snippet += 'var _paq = window._paq = window._paq || [];';
+
+    if (normalizePath) {
+      snippet += `var path = window.location.pathname.toLowerCase();`;
+      snippet += `if (path !== '/' && path.endsWith('/')) path = path.slice(0, -1);`;
+      snippet += `_paq.push(['setCustomUrl', window.location.origin + path + window.location.search + window.location.hash]);`;
+    }
   }
 
   // The older version of the app would use "rememberCookieConsentGiven" so Matomo could create a "consent" cookie to keep track of consent status.
