@@ -1,15 +1,4 @@
-var contentLib = require('/lib/xp/content');
 var portalLib = require('/lib/xp/portal');
-
-function hashCode(str) {
-  var hash = 0;
-  for (var i = 0, len = str.length; i < len; i++) {
-      var chr = str.charCodeAt(i);
-      hash = (hash << 5) - hash + chr;
-      hash |= 0; // Convert to 32bit integer
-  }
-  return hash;
-}
 
 exports.responseProcessor = function (req, res) {
   if (req.mode !== 'live') {
@@ -60,18 +49,13 @@ exports.responseProcessor = function (req, res) {
     res.pageContributions.bodyEnd = [bodyEnd];
   }
 
-  var hash = "";
-  if (req.cookies["no-bouvet-app-matomo_disabled"]) { // If this cookie is present, the Cookie Panel app is installed.
-    hash = hashCode(req.cookies["no-bouvet-app-matomo_disabled"] + ""); // Create a unique hash if user has consented to tracking.
-  }
-
   let siteRootPath = portalLib.pageUrl({ id: portalLib.getSite()._id });
   // Site vhost is mounted on domain root, e.g. www.example.com
   if (siteRootPath === "/") {
     siteRootPath = "";
   }
 
-  res.pageContributions.headEnd.push("<script defer src=\"" + siteRootPath + "/matomo.js?" + hash + "\"></script>");
+  res.pageContributions.headEnd.push("<script defer src=\"" + siteRootPath + "/matomo.js\"></script>");
   if (matomoTagManagerContainerId) {
     res.pageContributions.headEnd.push("<script defer src=\"" + matomoJavaScriptUrl + "/container_" + matomoTagManagerContainerId + ".js" + overrideAddon + "\"></script>");
   }
