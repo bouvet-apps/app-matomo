@@ -78,11 +78,6 @@ exports.get = function (req) {
     }
   }
 
-  // The older version of the app would use "rememberCookieConsentGiven" so Matomo could create a "consent" cookie to keep track of consent status.
-  // We're now fully relying on the Cookie Panel app (or any other cookie consent solution people might use) to keep track of consent status.
-  // So we need to make sure that old cookie is deleted for any previous visitors that might still have it, to prevent it from interfering.
-  snippet += '_paq.push(["forgetCookieConsentGiven"]);';
-
   if (trackingConsent === "cookieConsentRequired") {
     // "requireCookieConsent" will allow Matomo to track users, but not setting tracking cookies unless consent is given.
     snippet += '_paq.push(["requireCookieConsent"]);';
