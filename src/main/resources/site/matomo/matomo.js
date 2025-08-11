@@ -68,7 +68,8 @@ exports.get = function (req) {
 
   // If Matomo Tag Manager is activated, we don't need to set up the Matomo tracker manually
   if (matomoTagManagerContainerId) {
-    snippet += '/* Matomo Tag Manager */;var _mtm = window._mtm = window._mtm || [];_mtm.push({"mtm.startTime": (new Date().getTime()), "event": "mtm.Start"});';
+    snippet += '/* Matomo Tag Manager */';
+    snippet += 'var _mtm = window._mtm = window._mtm || [];_mtm.push({"mtm.startTime": (new Date().getTime()), "event": "mtm.Start"});';
     snippet += 'var _paq = window._paq = window._paq || [];';
 
     if (normalizePath) {
