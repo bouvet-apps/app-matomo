@@ -39,6 +39,10 @@ exports.get = function (req) {
     return; // App is not properly configured or tracking is disabled.
   }
 
+  var normalizingScript = `var path = window.location.pathname.toLowerCase();`;
+  normalizingScript += `if (path !== '/' && path.endsWith('/')) path = path.slice(0, -1);`;
+  normalizingScript += `_paq.push(['setCustomUrl', window.location.origin + path + window.location.search + window.location.hash]);`;
+
   var snippet = '';
 
   // If Matomo Tag Manager isn't activated, we set up the Matomo tracker as normal
@@ -52,16 +56,15 @@ exports.get = function (req) {
       snippet += '_paq.push(["setDocumentTitle", document.domain + "/" + document.title]);';
     }
     if (hideAliasClicks) {
-        snippet += '_paq.push(["setDomains", ["*.' + domainName + '"]]);';
+      snippet += '_paq.push(["setDomains", ["*.' + domainName + '"]]);';
     }
     if (insertDomainName) {
-        snippet += '_paq.push(["setCookieDomain", "*.' + domainName + '"]);';
+      snippet += '_paq.push(["setCookieDomain", "*.' + domainName + '"]);';
     }
     if (normalizePath) {
-      snippet += `var path = window.location.pathname.toLowerCase();`;
-      snippet += `if (path !== '/' && path.endsWith('/')) path = path.slice(0, -1);`;
-      snippet += `_paq.push(['setCustomUrl', window.location.origin + path + window.location.search + window.location.hash]);`;
+      snippet += normalizingScript;
     }
+
     snippet += '_paq.push(["trackPageView"]);';
     snippet += '_paq.push(["enableLinkTracking"]);';
   }
@@ -73,9 +76,7 @@ exports.get = function (req) {
     snippet += 'var _paq = window._paq = window._paq || [];';
 
     if (normalizePath) {
-      snippet += `var path = window.location.pathname.toLowerCase();`;
-      snippet += `if (path !== '/' && path.endsWith('/')) path = path.slice(0, -1);`;
-      snippet += `_paq.push(['setCustomUrl', window.location.origin + path + window.location.search + window.location.hash]);`;
+      snippet += normalizingScript;
     }
   }
 
