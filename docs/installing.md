@@ -25,13 +25,12 @@ install Matomo on-premise.
 7. Add the app to the site you wish to add analytics to by clicking "edit" on the site and simply adding it.
 ![](images/matomo_06.png)
 
-8. Click the pencil icon on the app. Enter the Matomo URL, Matomo JavaScript URL and Site ID from the step 5. If you wish to enable tracking,
-also check the box.
+8. Click the pencil icon on the app. Enter the Matomo URL, Matomo JavaScript URL and Site ID from the step 5. If you wish to enable tracking, also check the box.\
 ![](images/matomo_07.png)
 
-9. In version 1.5 an override field has been added. This is due to matomo cloud hosting has a default cache for 8 days, and sometimes it is necessary to force an override. The date will be added to the url, enticing the browser to detect that the file is new.
+10. In version 1.5 an override field has been added. This is due to matomo cloud hosting has a default cache for 8 days, and sometimes it is necessary to force an override. The date will be added to the url, enticing the browser to detect that the file is new.
 
-10. Finally, publish the site.
+11. Finally, publish the site.
 
 That’s it, you’re done!
 
