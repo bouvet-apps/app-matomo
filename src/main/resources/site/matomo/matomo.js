@@ -52,13 +52,13 @@ exports.get = function (req) {
     snippet += '_paq.push(["setTrackerUrl", "' + matomoUrl + '/matomo.php"]);';
     snippet += '_paq.push(["setSiteId", "' + siteId + '"]);';
 
-    if (trackSubdomains) {
+    if (insertDomainName) {
       snippet += '_paq.push(["setDocumentTitle", document.domain + "/" + document.title]);';
     }
     if (hideAliasClicks) {
       snippet += '_paq.push(["setDomains", ["*.' + domainName + '"]]);';
     }
-    if (insertDomainName) {
+    if (trackSubdomains) {
       snippet += '_paq.push(["setCookieDomain", "*.' + domainName + '"]);';
     }
     if (normalizePath) {
@@ -96,6 +96,12 @@ exports.get = function (req) {
     snippet += 'window.__RUN_ON_COOKIE_CONSENT__ = window.__RUN_ON_COOKIE_CONSENT__ || {};';
     snippet += 'window.__RUN_ON_COOKIE_CONSENT__["no-bouvet-app-matomo_disabled"] = function () {window._paq.push(["setConsentGiven"])};';
   }
+
+  // // If Matomo Tag Manager isn't activated, we now add the pageview for the tracker (important this is done after any consent requirements have been set)
+  // if (!matomoTagManagerContainerId) {
+  //   snippet += '_paq.push(["trackPageView"]);';
+  //   snippet += '_paq.push(["enableLinkTracking"]);';
+  // }
 
   return {
       headers: {
