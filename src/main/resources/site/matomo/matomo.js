@@ -97,12 +97,6 @@ exports.get = function (req) {
     snippet += 'window.__RUN_ON_COOKIE_CONSENT__["no-bouvet-app-matomo_disabled"] = function () {window._paq.push(["setConsentGiven"])};';
   }
 
-  // // If Matomo Tag Manager isn't activated, we now add the pageview for the tracker (important this is done after any consent requirements have been set)
-  // if (!matomoTagManagerContainerId) {
-  //   snippet += '_paq.push(["trackPageView"]);';
-  //   snippet += '_paq.push(["enableLinkTracking"]);';
-  // }
-
   return {
       headers: {
         "Cache-Control": "no-cache, must-revalidate" // As the script can change depending on the Matomo siteconfig, we can't cache it.
