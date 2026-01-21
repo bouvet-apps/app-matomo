@@ -1,11 +1,11 @@
 # Installing the app
 
-This guide assumes that you already have an account with Matomo and have enabled tracking for at least one website. 
+This guide assumes that you already have an account with Matomo and have enabled tracking for at least one website.
 If not, please [refer to guidelines](https://matomo.org/) to set up Matomo Analytics first. Alternatively, you may
 install Matomo on-premise.
 
 1. In the "Manage Measurables" dashboard click the "Add a new measurable" button.
-![](images/matomo_00.png) 
+![](images/matomo_00.png)
 
 2. Select whether you would like to add analytics to a public website or intranet.
 ![](images/matomo_01.png)
@@ -25,13 +25,12 @@ install Matomo on-premise.
 7. Add the app to the site you wish to add analytics to by clicking "edit" on the site and simply adding it.
 ![](images/matomo_06.png)
 
-8. Click the pencil icon on the app. Enter the Matomo URL, Matomo JavaScript URL and Site ID from the step 5. If you wish to enable tracking,
-also check the box.
+8. Click the pencil icon on the app. Enter the Matomo URL, Matomo JavaScript URL and Site ID from the step 5. If you wish to enable tracking, also check the box.\
 ![](images/matomo_07.png)
 
-9. In version 1.5 an override field has been added. This is due to matomo cloud hosting has a default cache for 8 days, and sometimes it is necessary to force an override. The date will be added to the url, enticing the browser to detect that the file is new. 
+10. In version 1.5 an override field has been added. This is due to matomo cloud hosting has a default cache for 8 days, and sometimes it is necessary to force an override. The date will be added to the url, enticing the browser to detect that the file is new.
 
-10. Finally, publish the site.
+11. Finally, publish the site.
 
 That’s it, you’re done!
 
@@ -73,24 +72,23 @@ As an example; if our site has the urls from step 8, above, the CSP rules pertai
 - `script-src: 'self', my-sweet-site.matomo.cloud/matomo.js`
 - `connect-src: Matomo server tracker Url (e.g. my-sweet-site.matomo.cloud/matomo.php`
 
-# Tracking cookies
-By default, the Matomo tracking code will store tracking cookies on the user's device whether the user has consented or not.
+# Tracking cookies and consent
+The app has 3 options with regards to Matomo's use of tracking cookies and the requirements for user-consent.
 
-If you wish to deactivate tracking cookies, you have three options:
+## No consent required
+Matomo will track users and create tracking cookies in the process. The app won't set any requirements for consent.
 
-## Never use tracking cookies
-Simply tick the box "Disable tracking cookies". Matomo analytics will not set any cookies on the user's device.
+## Cookie consent required (default option)
+Matomo will track users, but will not create tracking cookies unless consent has been given. When Matomo tracks users without tracking cookies it will rely on fingerprinting instead, though that may not give the best possible accuracy.
 
-## Roll your own 
-Tick the box "Disable tracking cookies". Matomo analytics will no longer set tracking cookies by default.
+You may implement your own functionality on your site allowing users to consent to cookies. When the user consents or has consented, you can either run `window._paq.push(["setCookieConsentGiven"])` every page load or run `window._paq.push(["rememberCookieConsentGiven"])` just once (Matomo will add a cookie to remember consent). For the latter, you will need to make sure you run `window._paq.push(["forgetCookieConsentGiven"])` if a user revokes consent.
 
-You may implement functionality on your site allowing users to consent to cookies.
+## Tracking consent required
+Matomo will not track anything unless consent has been given.
 
-If the user consents, run `window._paq.push(["rememberCookieConsentGiven"])` once. Matomo analytics will remember that the user has consented.
+You may implement your own functionality on your site allowing users to consent to tracking. When the user consents or has consented, you either run `window._paq.push(["setConsentGiven"])` every page load or run `window._paq.push(["rememberConsentGiven"])` just once (Matomo will add a cookie to remember consent). For the latter, you will need to make sure you run `window._paq.push(["forgetConsentGiven"])` if a user revokes consent.
 
-Later, if the user revokes consent, run `window._paq.push(["forgetCookieConsentGiven"])` once. Matomo analytics will remember that the user has revoked consent.
-
-## Cookie Panel app
+# Cookie Panel app
 If you use the Cookie Panel app (coming soon to Enonic Market), you can use this to toggle user consent to cookies.
 
 Enter the following values:
@@ -100,4 +98,4 @@ Enter the following values:
 
 ![](images/matomo_08.png)
 
-The Matomo analytics app will check whether the Cookie Panel app is installed and add functions to the window object if it is. This will allow the Cookie Panel app to toggle user consent for storing tracking cookies.
+The Matomo analytics app will add a function to the window object which can give cookie consent or tracking consent depending the selected option. This will allow the Cookie Panel app to run this function when it sees a user has consented.

@@ -1,4 +1,3 @@
-var contentLib = require('/lib/xp/content');
 var portalLib = require('/lib/xp/portal');
 
 exports.get = function (req) {
@@ -17,10 +16,11 @@ exports.get = function (req) {
   var domainName = portalLib.sanitizeHtml(siteConfig['domainName'] || '');
   var matomoOptions = siteConfig.options || {};
   var trackSubdomains = matomoOptions['trackSubdomains'] || false;
-  var insertDomainName = matomoOptions['insertDomainName'] || false; 
+  var insertDomainName = matomoOptions['insertDomainName'] || false;
   var hideAliasClicks = matomoOptions['hideAliasClicks'] || false;
+  var normalizePath = matomoOptions['normalizePath'] || false;
   var enableTracking = matomoOptions['enableTracking'] || false;
-  var disableCookies = matomoOptions['disableCookies'] || false;
+  var trackingConsent = matomoOptions['trackingConsent'] || "cookieConsentRequired";
   var matomoTagManagerContainerId = '';
   if (siteConfig.matomoTagManager) {
     matomoTagManagerContainerId = portalLib.sanitizeHtml(siteConfig['matomoTagManager'].containerId || '');
@@ -34,11 +34,14 @@ exports.get = function (req) {
     typeof trackSubdomains !== "boolean" ||
     typeof insertDomainName !== "boolean" ||
     typeof hideAliasClicks !== "boolean" ||
-    typeof enableTracking !== "boolean" ||
-    typeof disableCookies !== "boolean"
+    typeof enableTracking !== "boolean"
   ) {
     return; // App is not properly configured or tracking is disabled.
   }
+
+  var normalizingScript = `var path = window.location.pathname.toLowerCase();`;
+  normalizingScript += `if (path !== '/' && path.endsWith('/')) path = path.slice(0, -1);`;
+  normalizingScript += `_paq.push(['setCustomUrl', window.location.origin + path + window.location.search + window.location.hash]);`;
 
   var snippet = '';
 
@@ -48,51 +51,55 @@ exports.get = function (req) {
     snippet += 'var _paq = window._paq = window._paq || [];';
     snippet += '_paq.push(["setTrackerUrl", "' + matomoUrl + '/matomo.php"]);';
     snippet += '_paq.push(["setSiteId", "' + siteId + '"]);';
-  
-    if (trackSubdomains) {
+
+    if (insertDomainName) {
       snippet += '_paq.push(["setDocumentTitle", document.domain + "/" + document.title]);';
     }
     if (hideAliasClicks) {
-        snippet += '_paq.push(["setDomains", ["*.' + domainName + '"]]);';
+      snippet += '_paq.push(["setDomains", ["*.' + domainName + '"]]);';
     }
-    if (insertDomainName) {
-        snippet += '_paq.push(["setCookieDomain", "*.' + domainName + '"]);';
+    if (trackSubdomains) {
+      snippet += '_paq.push(["setCookieDomain", "*.' + domainName + '"]);';
     }
+    if (normalizePath) {
+      snippet += normalizingScript;
+    }
+
     snippet += '_paq.push(["trackPageView"]);';
     snippet += '_paq.push(["enableLinkTracking"]);';
-    if (req.cookies["no-bouvet-app-matomo_disabled"]) { // If this cookie is present, the Cookie Panel app is installed.
-      snippet += '_paq.push(["requireCookieConsent"]);'; // We don't set cookies without user consent.
-      if (req.cookies["no-bouvet-app-matomo_disabled"] === "true") { // User has not given consent.
-        snippet += '_paq.push(["forgetCookieConsentGiven"]);'; // User may have revoked consent. We shall remember this.
-  
-        /* This will allow the Cookie Panel app to tell us when the User has consented to storing tracking cookies */
-        snippet += 'window.__RUN_ON_COOKIE_CONSENT__ = window.__RUN_ON_COOKIE_CONSENT__ || {};';
-        snippet += 'window.__RUN_ON_COOKIE_CONSENT__["no-bouvet-app-matomo_disabled"] = function () {window._paq.push(["rememberCookieConsentGiven"])};';
-      }
-    } else if (disableCookies) {
-      snippet += '_paq.push(["requireCookieConsent"]);'; // We don't set cookies without user consent.
-    }
   }
 
   // If Matomo Tag Manager is activated, we don't need to set up the Matomo tracker manually
   if (matomoTagManagerContainerId) {
-    snippet += '/* Matomo Tag Manager */;var _mtm = window._mtm = window._mtm || [];_mtm.push({"mtm.startTime": (new Date().getTime()), "event": "mtm.Start"});';
-    if (req.cookies["no-bouvet-app-matomo_disabled"]) { // If this cookie is present, the Cookie Panel app is installed.
-      if (req.cookies["no-bouvet-app-matomo_disabled"] === "true") { // User has not given consent.
-        snippet += 'window._paq=window._paq||[];_paq.push(["forgetCookieConsentGiven"]);_paq.push(["requireCookieConsent"]);'; // User may have revoked consent. We shall remember this.
+    snippet += '/* Matomo Tag Manager */';
+    snippet += 'var _mtm = window._mtm = window._mtm || [];_mtm.push({"mtm.startTime": (new Date().getTime()), "event": "mtm.Start"});';
+    snippet += 'var _paq = window._paq = window._paq || [];';
 
-        /* This will allow the Cookie Panel app to tell us when the User has consented to storing tracking cookies */
-        snippet += 'window.__RUN_ON_COOKIE_CONSENT__ = window.__RUN_ON_COOKIE_CONSENT__ || {};';
-        snippet += 'window.__RUN_ON_COOKIE_CONSENT__["no-bouvet-app-matomo_disabled"] = function () {window._paq.push(["rememberCookieConsentGiven"]);};';
-      } else if (req.cookies["no-bouvet-app-matomo_disabled"] === "false") { // User have given consent and we can track responsibly.
-        snippet += 'window._paq=window._paq||[];_paq.push(["setConsentGiven"]);';
-      }
+    if (normalizePath) {
+      snippet += normalizingScript;
     }
+  }
+
+  if (trackingConsent === "cookieConsentRequired") {
+    // "requireCookieConsent" will allow Matomo to track users, but not setting tracking cookies unless consent is given.
+    snippet += '_paq.push(["requireCookieConsent"]);';
+
+    // We're setting a function on the window object that can give consent, so the Cookie Panel app (or any other cookie consent solution) can call this function when needed.
+    snippet += 'window.__RUN_ON_COOKIE_CONSENT__ = window.__RUN_ON_COOKIE_CONSENT__ || {};';
+    snippet += 'window.__RUN_ON_COOKIE_CONSENT__["no-bouvet-app-matomo_disabled"] = function () {window._paq.push(["setCookieConsentGiven"])};';
+  }
+
+  if (trackingConsent === "trackingConsentRequired") {
+    // "requireConsent" will not allow Matomo to track and process any data unless consent is given.
+    snippet += '_paq.push(["requireConsent"]);';
+
+    snippet += 'window.__RUN_ON_COOKIE_CONSENT__ = window.__RUN_ON_COOKIE_CONSENT__ || {};';
+    snippet += 'window.__RUN_ON_COOKIE_CONSENT__["no-bouvet-app-matomo_disabled"] = function () {window._paq.push(["setConsentGiven"])};';
   }
 
   return {
       headers: {
-        "Cache-Control": "no-cache, must-revalidate" // As the script can be wildly different for each user, we can't cache it.
+        "Cache-Control": "no-cache, must-revalidate" // As the script can change depending on the Matomo siteconfig, we can't cache it.
       },
       contentType: 'application/javascript; charset=utf-8',
       body: snippet
