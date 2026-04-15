@@ -1,7 +1,7 @@
 plugins {
   id 'java'
   id 'maven-publish'
-  id 'com.enonic.xp.app' version '3.4.0'
+  id 'com.enonic.xp.app' version '3.6.1'
 }
 
 publishing {

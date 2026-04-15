@@ -1,27 +1,27 @@
-var portalLib = require('/lib/xp/portal');
+const portalLib = require('/lib/xp/portal');
 
 exports.get = function (req) {
   if (req.mode !== 'live') {
     return; // We don't need to tell our analytics about the things we do in Content Studio.
   }
 
-  var siteConfig = portalLib.getSiteConfig();
+  const siteConfig = portalLib.getSiteConfig();
   if (!siteConfig) {
     log.error("Failed to get site config in Matomo Analytics");
     return; // Something is wrong, so we stop.
   }
-  var matomoUrl = portalLib.sanitizeHtml(siteConfig['matomoUrl'] || '');
-  var matomoJavaScriptUrl = portalLib.sanitizeHtml(siteConfig['matomoJavaScriptUrl'] || '');
-  var siteId = portalLib.sanitizeHtml(siteConfig['siteId'] || '1');
-  var domainName = portalLib.sanitizeHtml(siteConfig['domainName'] || '');
-  var matomoOptions = siteConfig.options || {};
-  var trackSubdomains = matomoOptions['trackSubdomains'] || false;
-  var insertDomainName = matomoOptions['insertDomainName'] || false;
-  var hideAliasClicks = matomoOptions['hideAliasClicks'] || false;
-  var normalizePath = matomoOptions['normalizePath'] || false;
-  var enableTracking = matomoOptions['enableTracking'] || false;
-  var trackingConsent = matomoOptions['trackingConsent'] || "cookieConsentRequired";
-  var matomoTagManagerContainerId = '';
+  const matomoUrl = portalLib.sanitizeHtml(siteConfig['matomoUrl'] || '');
+  const matomoJavaScriptUrl = portalLib.sanitizeHtml(siteConfig['matomoJavaScriptUrl'] || '');
+  const siteId = portalLib.sanitizeHtml(siteConfig['siteId'] || '1');
+  const domainName = portalLib.sanitizeHtml(siteConfig['domainName'] || '');
+  const matomoOptions = siteConfig.options || {};
+  const trackSubdomains = matomoOptions['trackSubdomains'] || false;
+  const insertDomainName = matomoOptions['insertDomainName'] || false;
+  const hideAliasClicks = matomoOptions['hideAliasClicks'] || false;
+  const normalizePath = matomoOptions['normalizePath'] || false;
+  const enableTracking = matomoOptions['enableTracking'] || false;
+  const trackingConsent = matomoOptions['trackingConsent'] || "cookieConsentRequired";
+  let matomoTagManagerContainerId = '';
   if (siteConfig.matomoTagManager) {
     matomoTagManagerContainerId = portalLib.sanitizeHtml(siteConfig['matomoTagManager'].containerId || '');
   }
@@ -39,11 +39,11 @@ exports.get = function (req) {
     return; // App is not properly configured or tracking is disabled.
   }
 
-  var normalizingScript = `var path = window.location.pathname.toLowerCase();`;
+  let normalizingScript = `var path = window.location.pathname.toLowerCase();`;
   normalizingScript += `if (path !== '/' && path.endsWith('/')) path = path.slice(0, -1);`;
   normalizingScript += `_paq.push(['setCustomUrl', window.location.origin + path + window.location.search + window.location.hash]);`;
 
-  var snippet = '';
+  let snippet = '';
 
   // If Matomo Tag Manager isn't activated, we set up the Matomo tracker as normal
   if (!matomoTagManagerContainerId) {
