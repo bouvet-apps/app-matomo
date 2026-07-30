@@ -1,0 +1,4 @@
+kind: "Site"
+processors:
+  - name: "matomo-report"
+    order: 10
