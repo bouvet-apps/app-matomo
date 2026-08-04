@@ -28,8 +28,11 @@ dependencies {
   implementation xplibs.api.portal
   include xplibs.portal
   include xplibs.content
+  include xplibs.context
   include libs.lib.thymeleaf
   include libs.lib.http.client
+  include libs.lib.static
+  include libs.lib.router
 }
 
 wrapper {
