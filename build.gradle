@@ -4,6 +4,13 @@ plugins {
   id 'com.enonic.xp.app'
 }
 
+repositories {
+  mavenLocal()
+  mavenCentral()
+  xp.enonicRepo()
+  maven { url 'https://repo.enonic.com/public' }
+}
+
 publishing {
     publications {
         maven(MavenPublication) {
@@ -23,13 +30,6 @@ dependencies {
   include xplibs.content
   include libs.lib.thymeleaf
   include libs.lib.http.client
-}
-
-repositories {
-  mavenLocal()
-  mavenCentral()
-  xp.enonicRepo()
-  maven { url 'https://repo.enonic.com/public' }
 }
 
 wrapper {
