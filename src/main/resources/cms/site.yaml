@@ -2,3 +2,7 @@ kind: "Site"
 processors:
   - name: "matomo-report"
     order: 10
+mappings:
+  - controller: "/cms/matomo/matomo.js"
+    order: 10
+    pattern: '.*/matomo\.js'
