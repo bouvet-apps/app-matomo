@@ -14,6 +14,9 @@ Here's the documentation for this application:
 | App version | Required XP version | Download |
 | ----------- | ------------------- | -------- |
 | 1.0.0 | 7.5.0 | Clone and build this repo |
+| 2.0.0 | 7.14.0 | Clone and build this repo |
+| 3.0.0 | 8.x.x | Clone and build this repo |
+
 
 ## Building and deploying with the Gradle wrapper
 

@@ -1,0 +1,113 @@
+kind: "CMS"
+form:
+  - type: "TextLine"
+    name: "matomoUrl"
+    label: "Matomo URL"
+    helpText: "URL to the Matomo service. E.g. http://localhost or //example-site.matomo.cloud"
+    occurrences:
+      min: 1
+      max: 1
+  - type: "TextLine"
+    name: "matomoJavaScriptUrl"
+    label: "Matomo JavaScript URL"
+    helpText: "Base URL to the Matomo JavaScript. E.g. http://localhost or //cdn.matomo.cloud/example-site.matomo.cloud"
+    occurrences:
+      min: 1
+      max: 1
+  - type: "Date"
+    name: "cacheOverrideMatomoTagManager"
+    label: "Cache override for Matomo Tag Manager"
+    helpText: "Leave empty to not affect cache. Add new date to override cache, and remove it after a week. Not critical to remove it, but will keep it cleaner."
+    occurrences:
+      min: 0
+      max: 1
+  - type: "TextLine"
+    name: "siteId"
+    label: "Site ID"
+    helpText: "Site ID for the site. E.g. 1 or 2"
+    occurrences:
+      min: 1
+      max: 1
+  - type: "TextLine"
+    name: "domainName"
+    label: "Site domain name"
+    helpText: "Base domain name for the site, e.g example.com"
+    occurrences:
+      min: 1
+      max: 1
+  - type: "ItemSet"
+    name: "options"
+    label: "Matomo Options"
+    occurrences:
+      min: 1
+      max: 1
+    items:
+      - type: "CheckBox"
+        name: "trackSubdomains"
+        label: "Track visitors across all subdomains."
+        occurrences:
+          min: 0
+          max: 1
+      - type: "CheckBox"
+        name: "insertDomainName"
+        label: "Insert domain name in front of page title."
+        helpText: "If a user visits the «About us»-page on blog.example.com, it will appear as «blog / About us». This is the easiest way to get an overview of your traffic by subdomain."
+        occurrences:
+          min: 0
+          max: 1
+      - type: "CheckBox"
+        name: "hideAliasClicks"
+        label: "In the \"Outlinks\" report, hide clicks to known alias URLs of this site."
+        helpText: "So clicks on links to Alias URLs (eg. x.example.com) will not be counted as \"Outlink\"."
+        occurrences:
+          min: 0
+          max: 1
+      - type: "CheckBox"
+        name: "normalizePath"
+        label: "Make path lower-case and remove trailing slashes"
+        helpText: "Matomo does not normalize path when listing pages, enabling this option will do this in the browser. For instance \"/Example-Path/?Value=1#Info\" will become \"/example-path?Value=1#Info\""
+        occurrences:
+          min: 0
+          max: 1
+      - type: "CheckBox"
+        name: "trackDisabledJS"
+        label: "Track users with JavaScript disabled."
+        occurrences:
+          min: 0
+          max: 1
+      - type: "CheckBox"
+        name: "enableTracking"
+        label: "Enable tracking"
+        occurrences:
+          min: 0
+          max: 1
+      - type: "RadioButton"
+        name: "trackingConsent"
+        label: "Tracking consent"
+        helpText: "\"No consent required\" will allow Matomo to track users and set tracking cookies without any consent from the user. \"Cookie consent required\" will allow Matomo to track users, but it will not set tracking cookies unless consent is given (tracking without cookies may lose precision for some reports). \"Tracking consent required\" will not allow Matomo to track any process any data unless consent is given."
+        occurrences:
+          min: 1
+          max: 1
+        options:
+          - value: "noConsentRequired"
+            label: "No consent required"
+          - value: "cookieConsentRequired"
+            label: "Cookie consent required"
+          - value: "trackingConsentRequired"
+            label: "Tracking consent required"
+        default: "cookieConsentRequired"
+  - type: "ItemSet"
+    name: "matomoTagManager"
+    label: "Matomo Tag Manager"
+    helpText: "Enable Matomo Tag Manager. Note: This will disable the default pageView event, so you must set this up in Matomo Tag Manager to track page views."
+    occurrences:
+      min: 0
+      max: 1
+    items:
+      - type: "TextLine"
+        name: "containerId"
+        label: "Tag Manager Container ID"
+        helpText: "Enter the Container ID you wish to enable for this site. You can find it on the \"Manage Containers\" page in Matomo Tag Manager"
+        occurrences:
+          min: 1
+          max: 1

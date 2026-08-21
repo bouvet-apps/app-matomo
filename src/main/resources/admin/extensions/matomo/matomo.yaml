@@ -1,0 +1,5 @@
+kind: "AdminExtension"
+title: "Matomo"
+description: "Site analytics"
+interfaces:
+  - "contentstudio.contextpanel"

@@ -1,0 +1,5 @@
+[libraries]
+lib-thymeleaf = { module = "com.enonic.lib:lib-thymeleaf", version = "2.1.0" }
+lib-http-client = { module = "com.enonic.lib:lib-http-client", version = "3.2.2" }
+lib-static = { module = "com.enonic.lib:lib-static", version = "3.0.0" }
+lib-router = { module = "com.enonic.lib:lib-router", version = "4.0.0" }
