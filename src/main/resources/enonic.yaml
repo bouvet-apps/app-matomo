@@ -1,0 +1,5 @@
+kind: "Application"
+title: "Matomo Analytics App"
+description: "Track and report website traffic with Matomo"
+vendorName: "Bouvet"
+vendorUrl: "https://www.bouvet.no"
